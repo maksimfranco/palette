@@ -1,0 +1,196 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgba(53, 59, 72, 0.85);
+}
+body header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 60px;
+  width: 100%;
+  background-color: rgb(53, 59, 72);
+}
+body footer {
+  flex: 0 0 60px;
+  width: 100%;
+  background-color: rgb(53, 59, 72);
+}
+body .content {
+  width: 100%;
+  flex: 1 0 0%;
+}
+
+.palette {
+  position: relative;
+  overflow: hidden;
+}
+.palette__grid {
+  display: grid;
+  width: 100%;
+  height: calc(100vh - 120px);
+}
+.palette__grid > button {
+  border: none;
+  cursor: pointer;
+  transition: all 1000ms ease;
+}
+.palette .navigation {
+  position: absolute;
+  top: 0px;
+  left: calc(50% - 135px);
+  display: flex;
+  flex-direction: column;
+  width: 270px;
+}
+.palette .navigation_main, .palette .navigation_format, .palette .navigation_palette {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 0;
+  transition: all 250ms ease;
+}
+.palette .navigation_main button, .palette .navigation_format button, .palette .navigation_palette button {
+  color: rgb(236, 240, 241);
+  font-size: 14px;
+  font-weight: normal;
+  font-family: "Roboto", sans-serif;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  border: none;
+  background-color: rgba(53, 59, 72, 0.85);
+  cursor: pointer;
+}
+.palette .navigation_main button:hover, .palette .navigation_format button:hover, .palette .navigation_palette button:hover {
+  background-color: rgb(53, 59, 72);
+  transition: all 250ms ease;
+}
+.palette .navigation .navigation_main button {
+  width: 50%;
+}
+.palette .navigation .navigation_main button:first-child {
+  border-radius: 0 0 0 5px;
+}
+.palette .navigation .navigation_main button:last-child {
+  border-radius: 0 0 5px 0;
+}
+.palette .navigation .navigation_main.open {
+  transition: all 250ms ease;
+}
+.palette .navigation .navigation_format {
+  overflow: hidden;
+}
+.palette .navigation .navigation_format button {
+  width: 33.3333333333%;
+}
+.palette .navigation .navigation_format.open {
+  height: 80px;
+}
+.palette .navigation .navigation_palette {
+  overflow: hidden;
+}
+.palette .navigation .navigation_palette button {
+  width: 50%;
+}
+.palette .navigation .navigation_palette.open {
+  height: 80px;
+}
+.palette .navigation.close {
+  height: 0;
+  transition: all 250ms ease;
+}
+.palette .navigation.open {
+  transition: all 500ms ease;
+}
+.palette .navigation .notification_format,
+.palette .navigation .notification_palette {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: rgba(53, 59, 72, 0.85);
+}
+.palette .navigation .notification_format span,
+.palette .navigation .notification_palette span {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+}
+.palette .navigation .notification_format span:first-child,
+.palette .navigation .notification_palette span:first-child {
+  color: rgb(236, 240, 241);
+  font-size: 14px;
+  font-weight: normal;
+  font-family: "Roboto", sans-serif;
+  align-items: flex-end;
+}
+.palette .navigation .notification_format span:last-child,
+.palette .navigation .notification_palette span:last-child {
+  color: rgb(236, 240, 241);
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+  padding-top: 5px;
+}
+.palette .navigation .notification_format.close,
+.palette .navigation .notification_palette.close {
+  height: 0;
+  transition: all 250ms ease;
+}
+.palette .navigation .notification_format.open,
+.palette .navigation .notification_palette.open {
+  height: 80px;
+  transition: all 500ms ease;
+}
+.palette .navigation .notification_color {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.palette .navigation .notification_color span {
+  color: rgb(236, 240, 241);
+  font-size: 12px;
+  font-weight: normal;
+  font-family: "Roboto", sans-serif;
+  background-color: rgba(53, 59, 72, 0.85);
+}
+.palette .navigation .notification_color span:first-child {
+  position: relative;
+  padding: 10px 10px 10px 40px;
+}
+.palette .navigation .notification_color span:first-child::before {
+  position: absolute;
+  left: 10px;
+  top: calc(50% - 10px);
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-image: url("../images/copy.svg");
+}
+.palette .navigation .notification_color span:last-child {
+  padding: 10px;
+  text-align: right;
+}
+.palette .navigation .notification_color.close {
+  height: 0;
+  transition: all 250ms ease;
+}
+.palette .navigation .notification_color.open {
+  height: 120px;
+  transition: all 500ms ease;
+}
