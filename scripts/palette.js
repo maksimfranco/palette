@@ -48,10 +48,11 @@ function createPaletteMenu(format, palette) {
 function addNavFormat(timeout = 100) {
     let container = document.querySelector('.navigation_main')
     // навигация
-    const flexblock = createElWithClass('div', 'navigation_format', 'switching', 'close')
+    const flexblock = createElWithClass('div', 'navigation_format', 'close')
+    flexblock.dataset.role = 'toggle'
     // пункты навигации
     for (let item of PALETTEDATA.formats) {
-        let button = createElWithText('button', item.title)
+        let button = createElWithText('button', item.preview)
         button.dataset.tag = 'format_btn'
         button.dataset.format = item.format
         flexblock.append(button)
@@ -63,7 +64,8 @@ function addNavFormat(timeout = 100) {
 function addNavPalette(timeout = 100) {
     let container = document.querySelector('.navigation_main')
     // навигация
-    const flexblock = createElWithClass('div', 'navigation_palette', 'switching', 'close')
+    const flexblock = createElWithClass('div', 'navigation_palette', 'close')
+    flexblock.dataset.role = 'toggle'
     // пункты навигации
     for (let palette of Object.keys(COLORDATA)) {
         let button = createElWithText('button', COLORDATA[palette].fullname)
@@ -75,49 +77,54 @@ function addNavPalette(timeout = 100) {
     container.before(flexblock)
     setTimeout(() => flexblock.classList.replace('close', 'open'), timeout)
 }
-function addNotificationColor(color, background, timeout = 100) {
+function addNotification(timeout, type, ...args) {
     let container = document.querySelector('.navigation_main')
-    // блок уведомления
-    const div = createElWithClass('div', 'notification_color', 'switching', 'close')
-    div.style.background = background
-    // содержимое уведомления
-    let colorbox = createElWithText('span', color)
-    let textbox = createElWithText('span', pickRandomFromArray(PALETTEDATA.text.notifications.color))
-    div.append(colorbox, textbox)
+    const div = createElWithClass('div', 'notification', 'close')
+    div.dataset.role = 'toggle'
+    let wrapper = createElWithClass('div', 'wrapper')
+    if (type === 'color') {
+        wrapper.style.background = args[1]
+        // содержимое уведомления
+        let colorspan = createElWithText('span', args[0])
+        colorspan.classList.add('color')
+        let textspan = createElWithText('span', pickRandomFromArray(PALETTEDATA.text.notifications.color))
+        textspan.classList.add('randomtext')
+        wrapper.append(colorspan, textspan)
+    } else if (type === 'format') {
+        wrapper.style.background = 'linear-gradient(90deg, #00467F, #A5CC82)'
+        // содержимое уведомления
+        let textspan = createElWithText('span', PALETTEDATA.text.notifications.format)
+        textspan.classList.add('text')
+        let titlespan = createElWithText('span', args[0])
+        titlespan.classList.add('title')
+        wrapper.append(textspan, titlespan)
+    } else if (type === 'palette') {
+        wrapper.style.background = 'linear-gradient(90deg, #544a7d, #ffd452)'
+        // содержимое уведомления
+        let textspan = createElWithText('span', PALETTEDATA.text.notifications.palette)
+        textspan.classList.add('text')
+        let titlespan = createElWithText('span', args[0])
+        titlespan.classList.add('title')
+        wrapper.append(textspan, titlespan)
+    } else if (type === 'same_format') {
+        wrapper.style.background = 'linear-gradient(90deg, #00416A, #E4E5E6)'
+        // содержимое уведомления
+        let textspan = createElWithText('span', 'Формат уже выбран!')
+        textspan.classList.add('text')
+        wrapper.append(textspan)
+    } else if (type === 'same_palette') {
+        wrapper.style.background = 'linear-gradient(90deg, #5D4157, #A8CABA)'
+        // содержимое уведомления
+        let textspan = createElWithText('span', 'Палитра уже выбрана!')
+        textspan.classList.add('text')
+        wrapper.append(textspan)
+    }
     // появление
+    div.append(wrapper)
     container.before(div)
     setTimeout(() => div.classList.replace('close', 'open'), timeout)
     setTimeout(() => div.classList.replace('open', 'close'), timeout + 1250)
     setTimeout(() => div.remove(), timeout + 1500)
-}
-function addNotificationFormat(format, timeout = 100) {
-    let container = document.querySelector('.navigation_main')
-    // блок уведомления
-    const div = createElWithClass('div', 'notification_format', 'switching', 'close')
-    // содержимое уведомления
-    let textbox = createElWithText('span', PALETTEDATA.text.notifications.format)
-    let formatbox = createElWithText('span', format)
-    // formatbox.style.color = pickRandomFromArray(PALETTEDATA.text.menu.background)
-    div.append(textbox, formatbox)
-    // появление
-    container.before(div)
-    setTimeout(() => div.classList.replace('close', 'open'), timeout)
-    setTimeout(() => div.classList.replace('open', 'close'), timeout + 2250)
-    setTimeout(() => div.remove(), timeout + 2500)
-}
-function addNotificationPalette(palette, timeout = 100) {
-    let container = document.querySelector('.navigation_main')
-    // блок уведомления
-    const div = createElWithClass('div', 'notification_palette', 'switching', 'close')
-    // содержимое уведомления
-    let textbox = createElWithText('span', PALETTEDATA.text.notifications.palette)
-    let palettebox = createElWithText('span', palette)
-    div.append(textbox, palettebox)
-    // появление
-    container.before(div)
-    setTimeout(() => div.classList.replace('close', 'open'), timeout)
-    setTimeout(() => div.classList.replace('open', 'close'), timeout + 2250)
-    setTimeout(() => div.remove(), timeout + 2500)
 }
 function checkClick(event) {
     switch (event.target.dataset.tag) {
@@ -143,18 +150,26 @@ function checkClick(event) {
             break
         case 'format_btn':
             closeSwitchingElement()
-            changeFormat(event.target)
-            addNotificationFormat(event.target.textContent)
+            if (event.target.dataset.format === document.querySelector('[data-currentformat]').dataset.currentformat) {
+                addNotification(100, 'same_format')
+            } else {
+                changeFormat(event.target)
+                addNotification(100, 'format', event.target.textContent)
+            }
             break
         case 'palette_btn':
             closeSwitchingElement()
-            changePalette(event.target)
-            addNotificationPalette(event.target.textContent)
+            if (event.target.dataset.name === document.querySelector('[data-currentpalette]').dataset.currentpalette) {
+                addNotification(100, 'same_palette')
+            } else {
+                changePalette(event.target)
+                addNotification(100, 'palette', event.target.textContent)
+            }
             break
     }
 }
 function closeSwitchingElement() {
-    let element = document.querySelector('.switching')
+    let element = document.querySelector('[data-role]')
     if (element) {
         if (element.classList.contains('open')) {
             element.classList.replace('open', 'close')
@@ -168,7 +183,7 @@ function pickColor(element) {
     let format = document.querySelector('[data-currentformat]').dataset.currentformat
     let pickedcolor = formatColor(element.dataset.color, format)
     let backgroundcolor = formatColor(element.dataset.color, 'rgb')
-    addNotificationColor(pickedcolor, backgroundcolor)
+    addNotification(100, 'color', pickedcolor, backgroundcolor)
     navigator.clipboard.writeText(pickedcolor)
 }
 function formatColor(colordata, format) {

@@ -51,6 +51,29 @@ export const COLORDATA = {
             '127, 140, 141'
         ]
     },
+    seaforest: {
+        fullname: 'sea & forest',
+        template: 'repeat(4, 1fr) / repeat(3, 1fr)',
+        colors: [
+            '156, 196, 220',
+            '86, 152, 174',
+            '17, 115, 148',
+            '170, 198, 213',
+            '71, 128, 152',
+            '11, 98, 126',
+            '60, 164, 68',
+            '91, 149, 108',
+            '157, 219, 162',
+            '8, 94, 23',
+            '48, 92, 63',
+            '166, 205, 171'
+        ]
+    },
+    city: {
+        fullname: 'city',
+        template: 'repeat(2, 1fr) / repeat(3, 1fr)',
+        colors: ['223, 159, 31', '132, 132, 131', '80, 60, 50', '238, 205, 138', '173, 172, 171', '28, 20, 4']
+    },
     blactowhite: {
         fullname: 'black & white',
         template: 'repeat(4, 1fr) / repeat(5, 1fr)',
@@ -76,21 +99,16 @@ export const COLORDATA = {
             '13, 13, 13',
             '0, 0, 0'
         ]
-    },
-    gradient: {
-        fullname: 'gradient',
-        template: 'repeat(1, 1fr) / repeat(4, 1fr)',
-        colors: ['173, 92, 31', '195, 168, 34', '41, 163, 131', '64, 132, 191']
     }
 }
 export const PALETTEDATA = {
     formats: [
-        { format: 'hex', title: 'HEX' },
-        { format: 'rgb', title: 'RGB' },
-        { format: 'hsl', title: 'HSL' },
-        { format: 'sharphex', title: '#HEX' },
-        { format: 'rgba', title: 'RGBA' },
-        { format: 'hsla', title: 'HSLA' }
+        { format: 'hex', preview: 'hex' },
+        { format: 'rgb', preview: 'rgb()' },
+        { format: 'hsl', preview: 'hsl()' },
+        { format: 'sharphex', preview: '#hex' },
+        { format: 'rgba', preview: 'rgba()' },
+        { format: 'hsla', preview: 'hsla()' }
     ],
     text: {
         menu: {
