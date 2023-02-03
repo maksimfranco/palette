@@ -123,20 +123,21 @@ function addNotification(timeout, type, ...args) {
     div.append(wrapper)
     container.before(div)
     setTimeout(() => div.classList.replace('close', 'open'), timeout)
-    setTimeout(() => div.classList.replace('open', 'close'), timeout + 1250)
-    setTimeout(() => div.remove(), timeout + 1500)
+    setTimeout(() => div.classList.replace('open', 'close'), timeout + 1750)
+    setTimeout(() => div.remove(), timeout + 2000)
 }
 function checkClick(event) {
+    let timeout
     switch (event.target.dataset.tag) {
         case 'color_btn':
-            closeSwitchingElement()
-            pickColor(event.target)
+            timeout = closeSwitchingElement()
+            pickColor(timeout, event.target)
             break
         case 'format_nav_btn':
             if (document.querySelector('.navigation_format')) {
                 closeSwitchingElement()
             } else {
-                closeSwitchingElement()
+                timeout = closeSwitchingElement()
                 addNavFormat()
             }
             break
@@ -144,26 +145,26 @@ function checkClick(event) {
             if (document.querySelector('.navigation_palette')) {
                 closeSwitchingElement()
             } else {
-                closeSwitchingElement()
-                addNavPalette()
+                timeout = closeSwitchingElement()
+                addNavPalette(timeout)
             }
             break
         case 'format_btn':
-            closeSwitchingElement()
+            timeout = closeSwitchingElement()
             if (event.target.dataset.format === document.querySelector('[data-currentformat]').dataset.currentformat) {
-                addNotification(100, 'same_format')
+                addNotification(timeout, 'same_format')
             } else {
                 changeFormat(event.target)
-                addNotification(100, 'format', event.target.textContent)
+                addNotification(timeout, 'format', event.target.textContent)
             }
             break
         case 'palette_btn':
-            closeSwitchingElement()
+            timeout = closeSwitchingElement()
             if (event.target.dataset.name === document.querySelector('[data-currentpalette]').dataset.currentpalette) {
-                addNotification(100, 'same_palette')
+                addNotification(timeout, 'same_palette')
             } else {
                 changePalette(event.target)
-                addNotification(100, 'palette', event.target.textContent)
+                addNotification(timeout, 'palette', event.target.textContent)
             }
             break
     }
@@ -174,16 +175,20 @@ function closeSwitchingElement() {
         if (element.classList.contains('open')) {
             element.classList.replace('open', 'close')
             setTimeout(() => element.remove(), 250)
+            return 250
         } else if (element.classList.contains('close')) {
             element.remove()
+            return 100
         }
+    } else {
+        return 0
     }
 }
-function pickColor(element) {
+function pickColor(timeout, element) {
     let format = document.querySelector('[data-currentformat]').dataset.currentformat
     let pickedcolor = formatColor(element.dataset.color, format)
     let backgroundcolor = formatColor(element.dataset.color, 'rgb')
-    addNotification(100, 'color', pickedcolor, backgroundcolor)
+    addNotification(timeout, 'color', pickedcolor, backgroundcolor)
     navigator.clipboard.writeText(pickedcolor)
 }
 function formatColor(colordata, format) {
